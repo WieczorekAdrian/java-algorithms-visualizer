@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Structures Visualizer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+        h1 { color: #333; }
+        .container {
+            background: white;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #eee;
+            border-radius: 8px;
+        }
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background-color: #0056b3; }
+        button.remove { background-color: #dc3545; }
+        button.remove:hover { background-color: #a71d2a; }
+
+        #graphDiv {
+            margin-top: 20px;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Data Structure Visualizer</h1>
+
+    <div class="controls">
+        <h3>Add Element</h3>
+        <input type="text" id="addInput" placeholder="Enter value (e.g. A)">
+        <button onclick="addElement()">Add (+)</button>
+    </div>
+
+    <div class="controls">
+        <h3>Remove Element</h3>
+        <input type="number" id="removeInput" placeholder="Enter index (e.g. 1)">
+        <button class="remove" onclick="removeElement()">Remove (-)</button>
+    </div>
+
+    <hr>
+    <div id="graphDiv">
+        <em>Visualization will appear here...</em>
+    </div>
+</div>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    mermaid.initialize({ startOnLoad: false });
+
+    window.refreshGraph = async () => {
+        try {
+            const response = await fetch('/api/list/view?t=' + Date.now());
+            const graphText = await response.text();
+
+            const element = document.getElementById('graphDiv');
+            element.removeAttribute('data-processed');
+            element.innerHTML = graphText;
+
+            await mermaid.run({ nodes: [element] });
+        } catch (error) {
+            console.error("Visualization error:", error);
+        }
+    }
+
+    window.addElement = async () => {
+        const val = document.getElementById('addInput').value;
+        if (!val) return alert("Enter a value!");
+
+        await fetch(`/api/list/add?value=${val}`, { method: 'POST' });
+        document.getElementById('addInput').value = '';
+        refreshGraph();
+    }
+
+    window.removeElement = async () => {
+        const index = document.getElementById('removeInput').value;
+        if (!index) return alert("Enter an index!");
+
+        await fetch(`/api/list/remove?index=${index}`, { method: 'POST' });
+        document.getElementById('removeInput').value = '';
+        refreshGraph();
+    }
+
+    refreshGraph();
+</script>
+
+</body>
+</html>
