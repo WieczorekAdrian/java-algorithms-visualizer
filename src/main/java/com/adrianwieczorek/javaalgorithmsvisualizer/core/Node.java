@@ -1,10 +1,10 @@
-package com.adrianwieczorek.javaalgorithmsvisualizer.structures;
+package com.adrianwieczorek.javaalgorithmsvisualizer.core;
 
 public class Node {
     // Here we store data
-    Object value;
+    public Object value;
     // Pointer to next node
-    Node next;
+    public Node next;
 
     public Node(Object value) {
         this.value = value;

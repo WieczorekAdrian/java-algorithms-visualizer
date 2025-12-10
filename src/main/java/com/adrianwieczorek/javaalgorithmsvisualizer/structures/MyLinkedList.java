@@ -1,6 +1,8 @@
 package com.adrianwieczorek.javaalgorithmsvisualizer.structures;
 
 
+import com.adrianwieczorek.javaalgorithmsvisualizer.core.Node;
+
 public class MyLinkedList {
 
     private Node head;
