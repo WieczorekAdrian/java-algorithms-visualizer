@@ -12,4 +12,7 @@ public class MyQueue {
     public Object peek(){
         return myLinkedList.getItem(0);
     }
+    public boolean isEmpty(){
+        return myLinkedList.isEmpty();
+    }
 }

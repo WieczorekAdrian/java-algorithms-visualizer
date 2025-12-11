@@ -5,8 +5,8 @@ import com.adrianwieczorek.javaalgorithmsvisualizer.core.Node;
 
 public class MyLinkedList {
 
-    private Node head;
-    private int size;
+    public Node head;
+    public int size;
 
     public MyLinkedList() {
         head = null;
@@ -81,5 +81,8 @@ public class MyLinkedList {
             curr = next;
         }
         head = prev;
+    }
+    public boolean isEmpty() {
+        return head == null;
     }
 }
